@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- PWA Fullscreen -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#b5dfed">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+  <title>The Eye Sees You · Hydra Missions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #e56b8a;
+      --gold-light: #f5a0b8;
+      --gold-dim: #c04f72;
+      --cream: #2a0818;
+      --deep: #f5dce5;
+    }
+    html, body {
+      height: 100%; background: var(--deep); color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+<title>The Eye Sees You · Hydra Missions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,Arial,sans-serif;color:#123e59}body{background:#aad8eb}button{font:inherit;-webkit-tap-highlight-color:transparent}
+.water{position:fixed;inset:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 15% 8%,#e1f5f4 0,transparent 53%),radial-gradient(ellipse at 85% 72%,#58b1d0 0,transparent 62%),linear-gradient(145deg,#b9e7ec,#81c7e1 50%,#d7eeee)}
+.water:after{content:"";position:absolute;inset:-12%;background:radial-gradient(ellipse at 28% 35%,#efffff80,transparent 48%),radial-gradient(ellipse at 78% 68%,#45a8cf35,transparent 52%);animation:water-light 18s ease-in-out infinite alternate;will-change:transform,opacity}
+@keyframes water-light{0%{transform:translate(-3%,-2%) scale(1);opacity:.65}50%{opacity:.95}100%{transform:translate(3%,3%) scale(1.07);opacity:.75}}
+#water-canvas{width:100%;height:100%;opacity:.78}
+.app{position:relative;min-height:100svh;min-height:100dvh;display:grid;grid-template-rows:auto 1fr auto;gap:20px;padding:max(30px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));text-align:center}
+header{padding:10px 0 0}.brand{margin:0;font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:400}.subtitle{margin:12px 0 0;font-size:16px;font-style:italic;font-weight:300;letter-spacing:.1em}.caption{margin:14px 0 0;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#37637a}
+main{display:flex;align-items:center;justify-content:center;min-height:0;padding:16px 0}
+.circle{position:relative;flex:none;width:min(82vw,480px,53svh);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 36% 28%,#f5ffffdb,#e1f5f3b8 38%,#b3e2ecb8 74%,#93cddfc7);border:1px solid #f3ffffc9;box-shadow:inset 0 0 48px #ffffff70,0 0 50px #e6ffff70,0 0 100px #e9ffff35;backdrop-filter:blur(3px)}
+.circle:before{content:"";position:absolute;inset:9px;border:1px solid #ffffff65;border-radius:50%;pointer-events:none}
+.mission-box{position:absolute;inset:16%;display:grid;place-items:center}
+#mission{margin:0;width:100%;text-align:center;font-size:25px;font-weight:300;font-style:italic;line-height:1.45;overflow-wrap:normal;text-wrap:pretty;color:#123e59}
+
+    .view { position: fixed; inset: 0; transition: opacity 0.8s ease; }
+    .view.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+
+    /* ══ AFFIRMATION VIEW ══ */
+    #view-affirmation { z-index: 10; }
+
+    .bg { position: absolute; inset: 0; }
+    .bg-gradient {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%,
+        rgba(229,107,138,.15) 0%, rgba(245,180,200,.3) 60%, var(--deep) 100%);
+    }
+    .center-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 22% 22% at 50% 48%,
+        rgba(255,255,255,0.92) 0%,
+        rgba(255,255,255,0.50) 30%,
+        rgba(255,255,255,0.15) 60%,
+        transparent 75%);
+    }
+    .warm-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 60% 50% at 50% 48%,
+        rgba(229, 107, 138, 0.55) 0%,
+        rgba(229, 107, 138, 0.28) 40%,
+        transparent 72%);
+    }
+    .bg-noise {
+      position: absolute; inset: 0; opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+    .orb-wrap { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+    .orb {
+      width: min(70vw,70vh); height: min(70vw,70vh); border-radius: 50%;
+      background: radial-gradient(circle at 48% 48%,
+        rgba(80,10,35,.55) 0%,
+        rgba(100,15,45,.45) 25%,
+        rgba(130,20,55,.30) 50%,
+        rgba(160,30,70,.12) 70%,
+        transparent 88%);
+      box-shadow: 0 0 80px 40px rgba(229,107,138,.55), 0 0 160px 80px rgba(229,107,138,.35), 0 0 280px 120px rgba(229,107,138,.18);
+      animation: orbPulse 6s ease-in-out infinite;
+    }
+    @keyframes orbPulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.08);opacity:1} }
+
+    .rays-svg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+    .rays-svg svg { width:min(100vw,100vh); height:min(100vw,100vh); opacity:.55; animation:raysSpin 60s linear infinite; }
+    @keyframes raysSpin { to{transform:rotate(360deg)} }
+
+    #aff-canvas { position:absolute; inset:0; }
+
+    .corner { position:absolute; width:40px; height:40px; opacity:.25; }
+    .corner svg { width:100%; height:100%; }
+    .corner.tl{top:1.5rem;left:1.5rem}
+    .corner.tr{top:1.5rem;right:1.5rem;transform:scaleX(-1)}
+    .corner.bl{bottom:3rem;left:1.5rem;transform:scaleY(-1)}
+    .corner.br{bottom:3rem;right:1.5rem;transform:scale(-1)}
+
+    .stage {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 0 2rem;
+      padding-bottom: calc(5vh - 8px);
+    }
+    .eyebrow {
+      font-family:'Inter',sans-serif; font-size:clamp(.55rem,1.8vw,.75rem);
+      font-weight:300; letter-spacing:.35em; color:rgba(42,8,24,.7);
+      text-transform:uppercase; margin-bottom:.4rem; margin-top:0;
+      opacity:0; animation:fadeUp 1.8s ease .3s forwards;
+    }
+    .divider {
+      width:1px; height:48px;
+      background:linear-gradient(to bottom,transparent,rgba(229,107,138,.8),transparent);
+      margin:0 auto 2.5rem; opacity:0; animation:fadeUp 1.8s ease .5s forwards;
+    }
+    .affirmation-box {
+      width: min(58vw, 58vh);
+      max-width: min(58vw, 58vh);
+      min-height: 4rem;
+      display:flex; align-items:center; justify-content:center;
+      position: relative;
+    }
+    #aff-glow {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transition: width 0.6s ease, height 0.6s ease;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%,
+        rgba(255,255,255,0.32) 0%,
+        rgba(255,255,255,0.14) 40%,
+        transparent 75%);
+    }
+    .affirmation-box p { position: relative; z-index: 1; }
+    .headlines {
+      position: absolute; top: 2.5rem; left: 0; right: 0;
+      display: flex; flex-direction: column; align-items: center;
+      z-index: 11;
+    }
+    .eyebrow-sub {
+      font-family:'Inter',sans-serif; font-style:italic; font-size:clamp(.8rem,2.5vw,1rem);
+      font-weight:300; color:rgba(229,107,138,0.7); letter-spacing:.15em;
+      margin-top:-.5rem; margin-bottom:0;
+      opacity:0; animation:fadeUp 1.8s ease .5s forwards;
+    }
+    #affirmation {
+      font-weight:300; font-style:italic;
+      font-size: clamp(1rem, 4.2vw, 2.2rem);
+      line-height:1.6; color:#2a0818; letter-spacing:.01em;
+      word-break:keep-all; overflow-wrap:break-word; hyphens:none;
+      width: 100%;
+      text-align: center;
+      text-shadow: 0 0 40px rgba(229,107,138,0.7), 0 0 80px rgba(255,120,170,0.4), 0 0 120px rgba(220,80,140,0.2);
+      transition:opacity 1.2s ease, transform 1.2s ease;
+    }
+    #affirmation.fade-out  { opacity:0; transform:translateY(-12px); }
+    #affirmation.fade-in   { opacity:1; transform:translateY(0); }
+    #affirmation.hidden    { opacity:0; transform:translateY(12px); }
+    .divider2 { width:1px; height:80px; background:linear-gradient(to bottom,transparent,rgba(229,107,138,.8),transparent); margin:0; opacity:0; animation:fadeUp 1.8s ease .7s forwards; }
+    .bottom-btns {
+      position: absolute;
+      bottom: 4.5rem; left: 0; right: 0; top: auto;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      opacity:0; animation:fadeUp 1.8s ease 1s forwards;
+      z-index: 15;
+    }
+    .ar-btn-fixed {
+      background: rgba(229,107,138,.25); border: 1.5px solid rgba(255,255,255,.9); color: #ffffff;
+      font-family:'Inter',sans-serif; font-size:clamp(.55rem,1.8vw,.72rem); font-weight:400;
+      letter-spacing:.2em; text-transform:uppercase; padding:.7rem 1.6rem;
+      cursor:pointer; transition:background .3s, border-color .3s;
+      display:flex; align-items:center; gap:.6rem; white-space:nowrap;
+      backdrop-filter: blur(8px);
+    }
+    .ar-btn-fixed:hover,.ar-btn-fixed:active { border-color:#ffffff; }
+
+    .ar-btn svg { width:18px; height:18px; flex-shrink:0; }
+
+    .daily-hint {
+      font-family: 'Inter', sans-serif; font-size: .55rem; letter-spacing: .22em;
+      text-transform: uppercase; color: rgba(42,8,24,.4);
+      margin-top: .2rem; text-align: center;
+      opacity: 0; animation: fadeUp 1.8s ease 1.2s forwards;
+    }
+    .footer {
+      position:absolute; bottom:env(safe-area-inset-bottom,1.5rem); left:0; right:0;
+      text-align:center; font-family:'Inter',sans-serif; font-size:clamp(.45rem,1.4vw,.6rem);
+      letter-spacing:.25em; color:rgba(42,8,24,.3); text-transform:uppercase; padding-bottom:1.2rem;
+    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+
+    .sound-fab {
+      position: relative;
+      background: rgba(229,107,138,.25); border: 1.5px solid rgba(255,255,255,.9);
+      color: #ffffff; padding: .7rem 1.4rem;
+      cursor: pointer; backdrop-filter: blur(8px);
+      transition: color .35s, border-color .35s, background .35s;
+      display: flex; align-items: center; gap: .6rem;
+      white-space: nowrap;
+    }
+    .sound-fab:hover, .sound-fab:active { border-color: #ffffff; background: rgba(229,107,138,.4); }
+    .sound-fab.active { color: #ffffff; border-color: rgba(255,255,255,.9); }
+    #sound-label {
+      font-family: 'Inter', sans-serif; font-size: .55rem; letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+
+
+
+
+
+        .sound-fab {
+      position: relative;
+      background: rgba(229,107,138,.25); border: 1.5px solid rgba(255,255,255,.9);
+      color: #ffffff; padding: .7rem 1.4rem;
+      cursor: pointer; backdrop-filter: blur(8px);
+      transition: color .35s, border-color .35s, background .35s;
+      display: flex; align-items: center; gap: .6rem;
+      white-space: nowrap;
+    }
+    .sound-fab:hover, .sound-fab:active { border-color: #ffffff; background: rgba(229,107,138,.4); }
+    .sound-fab.active { color: #ffffff; border-color: rgba(255,255,255,.9); }
+    #sound-label {
+      font-family: 'Inter', sans-serif; font-size: .55rem; letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+
+
+
+    
+    .mission-button {
+      background:#78334f; color:#fff; border:1px solid #78334f;
+      border-radius:2px; padding:1rem 1.3rem; font:400 .7rem Inter,sans-serif;
+      letter-spacing:.1em; cursor:pointer; min-height:44px;
+    }
+    .mission-button:hover { background:#592239; }
+    .mission-button:disabled { opacity:.6; cursor:wait; }
+    button:focus-visible { outline:3px solid #78334f; outline-offset:4px; }
+    .sound-fab { color:#78334f; border-color:rgba(120,51,79,.35); min-height:44px; }
+    .sound-fab.active { color:#78334f; }
+    .daily-hint { max-width:85vw; line-height:1.8; color:#78334f; }
+    .bottom-btns { bottom:max(3.5rem, calc(env(safe-area-inset-bottom) + 2.5rem)); }
+    .stage { padding-bottom:9vh; }
+    @media(max-height:600px) {
+      .headlines { top:1rem; }
+      .bottom-btns { bottom:2rem; gap:5px; }
+      .mission-button, .sound-fab { padding:.5rem 1rem; }
+      .daily-hint { display:none; }
+      .stage { padding-bottom:14vh; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation:none!important; transition:none!important; }
+      .eyebrow,.eyebrow-sub,.bottom-btns,.daily-hint { opacity:1; }
+      #aff-canvas,.rays-svg { display:none; }
+    }
+  </style>
+.controls{display:flex;align-items:center;flex-direction:column;gap:12px}.sound{border:1px solid #346d8580;color:#174d68;background:#edffff45;min-height:44px;padding:9px 18px;border-radius:999px;font-size:10px;letter-spacing:.15em;cursor:pointer}.hint{margin:0;font-size:9px;letter-spacing:.12em;line-height:1.7;color:#315a71}.copyright{margin:9px 0 0;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#3d687e}button:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(max-width:370px){.app{padding-left:12px;padding-right:12px;gap:12px}.brand{font-size:10px}.hint{max-width:260px}.circle{width:min(86vw,50svh)}}
+@media(max-height:650px){.app{gap:8px;padding-top:15px;padding-bottom:12px}header{padding:0}.subtitle{margin-top:7px}.caption{display:none}main{padding:4px 0}.controls{gap:6px}.circle{width:min(75vw,46svh)}.copyright{margin-top:3px}}
+@media(orientation:landscape) and (max-height:600px){.app{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;padding:18px 30px}header{grid-column:2;grid-row:1;align-self:end}main{grid-column:1;grid-row:1/3}.controls{grid-column:2;grid-row:2;justify-content:center}.circle{width:min(43vw,82svh)}}
+@media(prefers-reduced-motion:reduce){.water:after{animation:none}#mission{transition:none}}
+body.paused .water:after{animation-play-state:paused}
+</style>
+</head>
+<body>
+
+<!-- AFFIRMATION VIEW -->
+<div class="view" id="view-affirmation">
+  <div class="bg">
+    <div class="bg-gradient"></div>
+    <div class="warm-glow"></div>
+    <div class="center-glow"></div>
+    <div class="bg-noise"></div>
+    <div class="orb-wrap"><div class="orb"></div></div>
+    <div class="rays-svg"><svg id="rays-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><g id="rays-g" transform="translate(200,200)"></g></svg></div>
+    <canvas id="aff-canvas"></canvas>
+  </div>
+
+  <div class="corner tl"><svg viewBox="0 0 40 40" fill="none"><path d="M2 38L2 2L38 2" stroke="#ffffff" stroke-width=".8"/><path d="M2 12L12 2" stroke="#ffffff" stroke-width=".5" opacity=".5"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 40 40" fill="none"><path d="M2 38L2 2L38 2" stroke="#ffffff" stroke-width=".8"/><path d="M2 12L12 2" stroke="#ffffff" stroke-width=".5" opacity=".5"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 40 40" fill="none"><path d="M2 38L2 2L38 2" stroke="#ffffff" stroke-width=".8"/><path d="M2 12L12 2" stroke="#ffffff" stroke-width=".5" opacity=".5"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 40 40" fill="none"><path d="M2 38L2 2L38 2" stroke="#ffffff" stroke-width=".8"/><path d="M2 12L12 2" stroke="#ffffff" stroke-width=".5" opacity=".5"/></svg></div>
+
+  <div class="stage">
+    <div class="affirmation-box">
+      <div id="aff-glow"></div>
+      <p id="affirmation" class="hidden" aria-live="polite" aria-atomic="true"></p>
+    </div>
+  </div>
+  <div class="headlines">
+    <p class="eyebrow">The Eye Sees You</p>
+    <p class="eyebrow-sub">Hydra Missions</p>
+  </div>
+
+  <div class="bottom-btns">
+    <button class="mission-button" id="next-mission" onclick="nextAffirmation()">Give me another mission ↗</button>
+    <button class="sound-fab" id="sound-toggle" onclick="toggleSound()" title="Toggle sound">
+      <svg id="sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      </svg>
+      <svg id="sound-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display:none">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+      </svg>
+      <span id="sound-label">tap to sound</span>
+    </button>
+    <p class="daily-hint">One little mission. A different way to see Hydra.</p>
+  </div>
+
+  <div class="footer">© 2026 &nbsp;Digital Bohemians &nbsp;·&nbsp; All rights reserved</div>
+
+</div><!-- end view-affirmation -->
+<div class="water" aria-hidden="true"><canvas id="water-canvas"></canvas></div>
+<div class="app">
+<header><p class="brand">The Eye Sees You</p><p class="subtitle">Hydra Missions</p><p class="caption">One day. One little adventure.</p></header>
+<main><div class="circle"><div class="mission-box"><p id="mission" aria-live="polite" aria-atomic="true"></p></div></div></main>
+<footer class="controls"><button class="sound" id="sound" type="button" aria-pressed="false">♫ Sound on</button><p class="hint">Your mission for today. A new one at midnight on Hydra.</p><p class="copyright">© 2026 Digital Bohemians · All rights reserved</p></footer>
+</div>
+<script>
+/* ══ HYDRA MISSIONS ══ */
+const missions = [
+  "Find a ginger cat today.",
+  "Ask its handler if you may gently pet a donkey.",
+  "Have a little chat with a donkey handler during a quiet moment.",
+  "Try a restaurant you have never visited before.",
+  "Start a conversation with someone who lives on Hydra.",
+  "Hike up Mount Eros on a day with suitable weather. Start early and bring water.",
+  "Light a candle in a monastery, where visitors are welcome to do so.",
+  "Visit three churches. Step inside if they are open to visitors.",
+  "Take a street you have never walked down before.",
+  "Find a blue door you would love to photograph.",
+  "Sit by the harbour for ten minutes and watch the boats.",
+  "Learn how to say “good morning” in Greek. Try it today.",
+  "Ask a local about their favourite part of island life.",
+  "Watch the sunset without looking at your phone.",
+  "Sketch a tiny corner of Hydra on a piece of paper.",
+  "Find a shady spot and read a few pages of a book.",
+  "Send someone a postcard from Hydra.",
+  "Order something you have never tasted before.",
+  "Notice three different sounds as you walk around the island.",
+  "Visit a small shop and ask about something made by hand.",
+  "Photograph three different door knockers.",
+  "Take a slow walk by the water with no headphones.",
+  "Find your favourite view and stay there for five minutes.",
+  "Write down one moment from today that you want to remember."
+  "Write down one moment from today that you want to remember.",
+  "Find a white cat resting in the shade.",
+  "Spot a cat with a striped tail.",
+  "Count how many cats you see on one short walk.",
+  "Draw a cat without lifting your pen from the paper.",
+  "Give a resting cat plenty of space and simply watch it for a minute.",
+  "Find a cat sitting somewhere unexpectedly high.",
+  "Look for a paw print in a dusty corner.",
+  "Spot a donkey from a respectful distance.",
+  "Watch how a donkey handler packs a load.",
+  "Ask a donkey handler the name of one of their animals.",
+  "Learn a donkey's age by asking its handler.",
+  "Thank someone who cares for the island's animals.",
+  "Find an animal-shaped detail on a sign or door.",
+  "Spot a bird perched above the harbour.",
+  "Listen for birds before you check your phone this morning.",
+  "Find a butterfly without trying to catch it.",
+  "Look for a fish from the harbour edge, keeping a safe distance.",
+  "Watch a seabird glide for as long as you can.",
+  "Draw an imaginary island animal inspired by what you see.",
+  "Notice how animals find the coolest places to rest.",
+  "Find a red door.",
+  "Find green shutters.",
+  "Find a house number with an interesting design.",
+  "Spot a hand-painted sign.",
+  "Find a staircase that curves out of sight.",
+  "Find a doorway framed by flowers.",
+  "Notice three different kinds of paving stone.",
+  "Look for a tiny balcony.",
+  "Find an old wooden door with beautiful weathered paint.",
+  "Spot a brass detail on a building.",
+  "Find a wall with several shades of white.",
+  "Look for a date carved into a building.",
+  "Find a window with lace curtains.",
+  "Look for an anchor used as decoration.",
+  "Find a piece of ironwork shaped like a leaf.",
+  "Spot a painted tile above a doorway.",
+  "Find a roofline you would like to sketch.",
+  "Look for a chimney with an unusual shape.",
+  "Find a street sign and copy its Greek letters.",
+  "Notice how one building joins the rock beneath it.",
+  "Find a boat with a woman's name.",
+  "Find a boat with a blue hull.",
+  "Spot three different types of knot from a public walkway.",
+  "Watch a boat arrive and notice how it slows down.",
+  "Look for a reflection of a mast in the water.",
+  "Count five different colours on the harbour boats.",
+  "Find a coil of rope and sketch its shape.",
+  "Look for a boat name written in Greek.",
+  "Watch a flag and work out which way the wind is blowing.",
+  "Notice how the colour of the sea changes beside the harbour wall.",
+  "Find a quiet place to listen to ropes tapping against masts.",
+  "Look for a reflection that looks like an abstract painting.",
+  "Photograph a boat detail instead of a whole boat.",
+  "Watch the wake of a passing boat fade away.",
+  "Notice three jobs people are doing around the harbour.",
+  "Find an empty bench with a view of the water.",
+  "Watch the harbour wake up early one morning.",
+  "Return to the harbour after dark and look at the lights.",
+  "Draw the outline of a boat in thirty seconds.",
+  "Find the smallest boat you can see from the waterfront.",
+  "Greet a shopkeeper in Greek.",
+  "Learn the Greek word for “thank you” and use it.",
+  "Ask someone how to pronounce the name of the island in Greek.",
+  "Ask a café worker what they like to drink on a hot day.",
+  "Ask a local which season they enjoy most on Hydra.",
+  "Ask a shopkeeper about an object that catches your eye.",
+  "Give someone a sincere compliment about their work.",
+  "Ask your host to teach you one useful Greek phrase.",
+  "Have a short conversation without mentioning where you work.",
+  "Ask a willing local what has changed on the island over the years.",
+  "Let someone go ahead of you in a queue.",
+  "Thank a restaurant worker by name if they have introduced themselves.",
+  "Ask a companion what has surprised them most about Hydra.",
+  "Share your favourite discovery with another visitor.",
+  "Ask someone which view they would draw from memory.",
+  "Learn how to say “good evening” in Greek.",
+  "Ask a vendor how to pronounce one item on their menu.",
+  "Say hello to someone you have seen more than once today.",
+  "Ask a local about a festival they enjoy.",
+  "Tell someone one thing you love about the island.",
+  "Try a Greek coffee if you enjoy coffee.",
+  "Order a dish with an ingredient you rarely eat.",
+  "Ask what today's homemade dish is.",
+  "Try a local sweet that suits your dietary needs.",
+  "Visit a bakery in the morning.",
+  "Pick a pastry by asking the baker for a suggestion.",
+  "Taste a seasonal fruit.",
+  "Order a meal with plenty of vegetables.",
+  "Try a new flavour of ice cream or sorbet.",
+  "Sit down for breakfast without your phone on the table.",
+  "Learn the Greek name of something on your plate.",
+  "Ask whether a dish is made on the premises.",
+  "Share a few small dishes with a companion.",
+  "Try a different café from your usual one.",
+  "Enjoy a glass of water slowly after a walk.",
+  "Choose a meal by asking what is in season.",
+  "Find a café table with a view of everyday island life.",
+  "Write down the name of a dish you want to cook at home.",
+  "Notice the scent outside a bakery.",
+  "Treat yourself to a long, unhurried lunch.",
+  "Visit an open gallery and choose your favourite artwork.",
+  "Look at one artwork for three full minutes.",
+  "Ask a gallery attendant about an artist whose work interests you.",
+  "Find a sculpture visible from a public space.",
+  "Sketch the shape of a sculpture using only five lines.",
+  "Visit a museum that is open today.",
+  "Read a museum label all the way to the end.",
+  "Learn one new fact about Hydra's history.",
+  "Look for an old photograph of the island on public display.",
+  "Compare an old photograph with the place it shows today.",
+  "Find a book about a Greek island in a bookshop.",
+  "Read the first page of a book with permission in a shop.",
+  "Ask about a handmade piece of jewellery.",
+  "Look for a ceramic object inspired by the sea.",
+  "Find a work of art that uses your favourite colour.",
+  "Write a tiny review of an artwork for yourself.",
+  "Look for a public plaque and learn what it commemorates.",
+  "Notice a creative detail in a shop window.",
+  "Find a piece of art that makes you smile.",
+  "Make a small drawing inspired by the island's architecture.",
+  "Pause quietly outside a church and notice its details.",
+  "Find a bell tower visible from a public lane.",
+  "Listen to church bells and count their chimes if they ring.",
+  "Look for a mosaic in a place open to visitors.",
+  "Notice the craftsmanship of a church door.",
+  "Spend two quiet minutes in a church that welcomes visitors.",
+  "Find a church courtyard open to visitors and sit quietly if seating is available.",
+  "Notice how light enters a church you are allowed to visit.",
+  "Learn the name of a church you pass.",
+  "Look for a small roadside shrine without disturbing it.",
+  "Take a short uphill walk in the cooler part of the day.",
+  "Choose a walking route that ends somewhere new to you.",
+  "Find a public viewpoint and notice the horizon.",
+  "Walk slowly enough to notice ten small details.",
+  "Retrace yesterday's walk and spot something you missed.",
+  "Take a morning walk before the lanes become busy.",
+  "Follow a public lane until you find a pleasant place to pause.",
+  "Count the steps on one short public staircase.",
+  "Find a shaded route back to your accommodation.",
+  "Leave extra time and walk to your next stop without rushing.",
+  "Walk with a companion in comfortable silence for five minutes.",
+  "Choose a shorter walk and enjoy every turn.",
+  "Watch the shadows move across a lane while you rest.",
+  "Find a view with both rooftops and sea.",
+  "Find a spot where you can see several layers of hills.",
+  "Make a tiny map of today's walk from memory.",
+  "Notice where a lane gets noticeably cooler.",
+  "Find a public path bordered by plants.",
+  "Visit a part of town you have not explored yet.",
+  "Stop halfway up a climb and appreciate the view behind you.",
+  "Look for sunlight flickering on shallow water.",
+  "Watch three waves reach the shore.",
+  "Find a seaside spot where the water looks turquoise.",
+  "Notice how the sea looks different under a cloud.",
+  "Sit near the water and take five slow breaths.",
+  "Find a smooth pebble, admire it and leave it where it belongs.",
+  "Look for a naturally heart-shaped stone without moving it.",
+  "Make a sketch of the shoreline.",
+  "Listen for the sound water makes against rocks.",
+  "Spot sea foam and watch its shape change.",
+  "Notice the different colours of wet and dry stone.",
+  "Find a patch of sea that looks silver in the sunlight.",
+  "Watch the water from the shade for ten minutes.",
+  "Look for a clear reflection of the sky in the water.",
+  "Photograph the sea without including the horizon.",
+  "Find a flower growing from a crack in a wall.",
+  "Notice three different leaf shapes.",
+  "Find a plant with a scent you recognise without picking it.",
+  "Look for a tree that creates a beautiful patch of shade.",
+  "Find a climbing plant wrapping around a railing.",
+  "Photograph a flower from an unusual angle.",
+  "Notice which plants thrive closest to the water.",
+  "Find a seed pod and draw it without removing it.",
+  "Look for a tiny garden visible from a public lane.",
+  "Spot a leaf that is almost the same colour as the sea.",
+  "Take a photograph using a doorway as a frame.",
+  "Make a photo series of three shades of blue.",
+  "Photograph a shadow that looks like something else.",
+  "Capture a reflection without photographing yourself.",
+  "Take a picture of a texture rather than a landmark.",
+  "Make one photograph that contains only two main colours.",
+  "Capture a tiny detail you would normally walk past.",
+  "Take a photograph from knee height in a safe spot.",
+  "Photograph the same view in the morning and evening.",
+  "Create a photo story with a beginning, middle and end.",
+  "Draw the island as an imaginary character.",
+  "Write a three-line poem about the harbour.",
+  "Invent a title for today's adventure.",
+  "Describe Hydra using five words that are not colours.",
+  "Write a postcard to your future self.",
+  "Record three things you heard today in a notebook.",
+  "Sketch your lunch before you eat it.",
+  "Draw a window in less than a minute.",
+  "Choose a colour and collect five photographs featuring it.",
+  "Write a short story inspired by a boat name.",
+  "Spend fifteen minutes with your phone tucked away.",
+  "Have a drink while simply watching the world go by.",
+  "Read one poem beside the sea.",
+  "Take a quiet break before you feel tired.",
+  "Notice the temperature of the breeze on your face.",
+  "Close your eyes while seated safely and identify three sounds.",
+  "Choose one thing today purely because it makes you curious.",
+  "Sit with a companion and each share a favourite moment.",
+  "Let your next walk be about noticing, not arriving.",
+  "Watch a cloud change shape.",
+  "Pick up a piece of ordinary litter and put it in a bin.",
+  "Bring a reusable water bottle on your next outing.",
+  "Decline a bag if you can comfortably carry your purchase.",
+  "Support a small independent business if something catches your eye.",
+  "Leave a place you visit a little tidier than you found it.",
+  "Make room for a loaded animal and its handler to pass.",
+  "Keep a narrow doorway clear while you stop to look around.",
+  "Thank someone who is cleaning or maintaining a public space.",
+  "Choose a souvenir you will actually use.",
+  "Share a table if a café is busy and everyone is comfortable with it.",
+  "Find the moon before bedtime, if the sky is clear.",
+  "Notice the first lights coming on around the harbour.",
+  "Take an evening walk on familiar, well-lit lanes.",
+  "Listen to how the island sounds after sunset.",
+  "Choose your favourite memory before you go to sleep.",
+  "Plan one small adventure for tomorrow.",
+  "Revisit a place that made you happy earlier in your stay.",
+  "Find a view you would like to remember without taking a photo.",
+  "Write a note of thanks to your host if you enjoyed your stay.",
+  "End the day by telling someone about your best Hydra discovery."
+];
+
+
+
+
+
+let lastIndex = -1;
+function getRandom() {
+  let idx;
+  do { idx = Math.floor(Math.random() * missions.length); } while (idx === lastIndex && missions.length > 1);
+  lastIndex = idx;
+  return missions[idx];
+const text = document.getElementById('mission');
+const box = document.querySelector('.mission-box');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const dailyStorageKey = 'hydra-daily-mission-v1';
+const hydraDate = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Europe/Athens', year: 'numeric', month: '2-digit', day: '2-digit'
+});
+let currentDailyMission = null;
+function dayOnHydra(now = new Date()) {
+  const parts = hydraDate.formatToParts(now);
+  return ['year','month','day'].map(type => parts.find(p => p.type === type).value).join('-');
+}
+
+/* Adaptive font size + glow based on text length + screen size */
+function adaptAffirmationSize(el) {
+  const len = el.textContent.length;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  // Orb is min(70vw, 70vh) — text box is min(58vw, 58vh), safe inner area ~52vw/52vh
+  const orbPx = Math.min(vw * 0.7, vh * 0.7);
+  const safeW = orbPx * 0.78; // usable width inside circle
+
+  // Base font size from screen
+  let base = vw < 380 ? 1.05 : vw < 480 ? 1.15 : vw < 640 ? 1.3 : 1.6;
+  // Scale down for longer texts
+  if      (len > 75) base *= 0.72;
+  else if (len > 60) base *= 0.82;
+  else if (len > 45) base *= 0.91;
+  else if (len > 30) base *= 0.97;
+  const size = Math.min(base, 2.2);
+  el.style.fontSize = size + 'rem';
+
+  // Estimate line count: approx chars per line based on font size + safe width
+  // ~1 rem ≈ 16px, average char width ≈ 0.52em
+  const fontPx = size * 16;
+  const charsPerLine = Math.floor(safeW / (fontPx * 0.52));
+  const lines = Math.ceil(len / Math.max(charsPerLine, 1));
+
+  // Glow: 1 line → narrow ellipse, 2+ lines → wider
+  const glow = document.getElementById('aff-glow');
+  if (glow) {
+    const glowW = lines <= 1 ? safeW * 0.65 : safeW * 1.05;
+    const glowH = lines <= 1 ? fontPx * 2.2 : fontPx * (lines * 1.65 + 0.8);
+    glow.style.width  = Math.round(glowW) + 'px';
+    glow.style.height = Math.round(glowH) + 'px';
+  }
+
+  // Max-width: keep text inside orb circle
+  // For a circle of radius r, chord at height h from center has width 2*sqrt(r²-h²)
+  // We use safeW directly as the constraint
+  el.style.maxWidth = Math.round(safeW) + 'px';
+function readDailyMission() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(dailyStorageKey));
+    if(saved && typeof saved.day === 'string' && missions.includes(saved.mission)) return saved;
+  } catch (_) { /* Storage may be unavailable in private or restricted browsers. */ }
+  return null;
+}
+
+let changingMission = false;
+function nextAffirmation() {
+  if (changingMission) return;
+  changingMission = true;
+  const button = document.getElementById("next-mission");
+  button.disabled = true;
+  setTimeout(() => { changingMission = false; button.disabled = false; }, 1300);
+  const el = document.getElementById('affirmation');
+  const text = getRandom();
+  if (el.classList.contains('hidden')) {
+    el.textContent = text;
+    adaptAffirmationSize(el);
+    el.classList.remove('hidden');
+    requestAnimationFrame(() => el.classList.add('fade-in'));
+  } else {
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      el.textContent = text;
+      adaptAffirmationSize(el);
+      el.classList.remove('fade-out','fade-in');
+      void el.offsetWidth; el.classList.add('fade-in');
+    }, 1200);
+function updateDailyMission() {
+  const today = dayOnHydra();
+  const saved = readDailyMission();
+  let selected = saved && saved.day === today ? saved : currentDailyMission;
+  if(!selected || selected.day !== today) {
+    const previous = currentDailyMission || saved;
+    const candidates = missions.filter(m => !previous || m !== previous.mission);
+    selected = { day: today, mission: candidates[Math.floor(Math.random()*candidates.length)] };
+    try { localStorage.setItem(dailyStorageKey, JSON.stringify(selected)); } catch (_) {}
+  }
+}
+nextAffirmation();
+window.addEventListener('resize', () => {
+  const el = document.getElementById('affirmation');
+  if (el && el.textContent) adaptAffirmationSize(el);
+});
+
+/* Rays */
+const rg = document.getElementById('rays-g');
+for (let i = 0; i < 24; i++) {
+  const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1','0'); l.setAttribute('y1','0');
+  l.setAttribute('x2','0'); l.setAttribute('y2','-195');
+  l.setAttribute('stroke','#ffffff'); l.setAttribute('opacity', i%3===0 ? '0.35' : '0.18');
+  l.setAttribute('stroke-width', i%3===0?'1.5':'0.7');
+  l.setAttribute('transform',`rotate(${(360/24)*i})`);
+  rg.appendChild(l);
+}
+
+/* Affirmation bg particles — bidirectional */
+(function(){
+  const canvas = document.getElementById('aff-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, pts = [];
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  function mkP(dirOverride){
+    const cx=W/2, cy=H*.48, sp=Math.min(W,H)*.28;
+    // dir: 1 = up, -1 = down
+    const dir = dirOverride !== undefined ? dirOverride : (Math.random() < 0.5 ? 1 : -1);
+    return {
+      x: cx+(Math.random()-.5)*sp*2,
+      y: cy+(Math.random()-.5)*sp,
+      r: Math.random()*1.8+.3,
+      speed: Math.random()*.45+.08,
+      dir: dir,
+      alpha: 0,
+      maxAlpha: Math.random()*.7+.15,
+      life: 0,
+      maxLife: Math.random()*320+140,
+      dx: (Math.random()-.5)*.25
+    };
+  currentDailyMission = selected;
+  if(text.textContent !== selected.mission) {
+    text.textContent = selected.mission;
+    fitText();
+  }
+
+  // Seed half up, half down
+  for(let i=0;i<80;i++){
+    const p=mkP(i < 40 ? 1 : -1);
+    p.life=Math.random()*p.maxLife;
+    pts.push(p);
+  }
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach((p,i)=>{
+      p.life++;
+      p.x += p.dx;
+      p.y -= p.speed * p.dir;  // dir: +1 up, -1 down
+      const t=p.life/p.maxLife;
+      p.alpha=t<.15?(t/.15)*p.maxAlpha:t>.75?((1-t)/.25)*p.maxAlpha:p.maxAlpha;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${p.alpha})`; ctx.fill();
+      // Out of bounds or life ended — respawn same direction
+      if(p.life>=p.maxLife || p.y < -20 || p.y > H+20) pts[i]=mkP(p.dir);
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+
+/* ══ AUDIO ENGINE ══ */
+let soundEnabled = true;
+let audioUnlocked = false;
+const audio = new Audio('DigitalWave.mp3');
+audio.loop = true;
+audio.volume = 0.7;
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('sound-toggle');
+  document.getElementById('sound-icon-on').style.display  = soundEnabled ? 'block' : 'none';
+  document.getElementById('sound-icon-off').style.display = soundEnabled ? 'none'  : 'block';
+  document.getElementById('sound-label').textContent = soundEnabled ? 'sound on' : 'sound off';
+  btn.classList.toggle('active', soundEnabled);
+  if (!soundEnabled) {
+    audio.pause();
+  } else {
+    audio.play().catch(e => console.warn('Audio play error:', e));
+  }
+}
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  try {
+    if (soundEnabled && audio) {
+      const p = audio.play();
+      if (p && p.then) {
+        p.then(() => {
+          const lbl = document.getElementById('sound-label');
+          const btn = document.getElementById('sound-toggle');
+          if (lbl) lbl.textContent = 'sound on';
+          if (btn) btn.classList.add('active');
+        }).catch(() => {});
+      }
+    }
+  } catch(e) {}
+function fitText(){
+  // The text lives in a centred square inscribed safely inside the circle.
+  let size=Math.min(29,box.clientWidth*.115);
+  text.style.fontSize=size+'px';
+  while((text.scrollHeight>box.clientHeight || text.scrollWidth>box.clientWidth) && size>8){size-=.5;text.style.fontSize=size+'px';}
+}
+document.addEventListener('touchstart', unlockAudio, { once: true });
+document.addEventListener('click', function onFirstClick() {
+  unlockAudio();
+  document.removeEventListener('click', onFirstClick);
+updateDailyMission();
+// Check the calendar date, rather than adding 24 hours, to handle daylight saving.
+setInterval(updateDailyMission, 1000);
+window.addEventListener('pageshow', updateDailyMission);
+window.addEventListener('focus', updateDailyMission);
+window.addEventListener('storage', event => {
+  if(event.key === dailyStorageKey) updateDailyMission();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden) updateDailyMission();
+});
+new ResizeObserver(fitText).observe(box);
+if(document.fonts)document.fonts.ready.then(fitText);
+const audio=new Audio('DigitalWave.mp3');audio.loop=true;audio.volume=.7;
+const sound=document.getElementById('sound');
+sound.addEventListener('click',async()=>{
+  if(!audio.paused){audio.pause();sound.textContent='♫ Sound on';sound.setAttribute('aria-pressed','false');return;}
+  try{await audio.play();sound.textContent='♫ Sound off';sound.setAttribute('aria-pressed','true');}
+  catch(e){sound.textContent='Sound unavailable';sound.setAttribute('aria-pressed','false');}
+});
+// Soft, shifting caustic ribbons, like sunlight through shallow water.
+const canvas=document.getElementById('water-canvas'),ctx=canvas.getContext('2d');
+let w=0,h=0,frame=0;
+function resizeWater(){const dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);paintWater(0);}
+function paintWater(t){
+ ctx.clearRect(0,0,w,h);
+ const scale=Math.max(w,h)/650;
+ ctx.save();ctx.scale(scale,scale);
+ const ww=w/scale,hh=h/scale;
+ for(let family=0;family<2;family++){
+  for(let i=-3;i<15;i++){
+   ctx.beginPath();
+   for(let v=-80;v<Math.max(ww,hh)+100;v+=5){
+    const drift=19*Math.sin(v*.022+t*.32+i*.9)+10*Math.sin(v*.047-t*.23+i*1.7);
+    const base=i*64+drift;
+    const x=family===0?v:base+v*.22;
+    const y=family===0?base+v*.29:v;
+    if(v===-80)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+   }
+   ctx.strokeStyle='rgba(238,255,255,.19)';ctx.lineWidth=9;ctx.shadowBlur=13;ctx.shadowColor='#efffff';ctx.stroke();
+   ctx.strokeStyle='rgba(250,255,255,.38)';ctx.lineWidth=1.6;ctx.shadowBlur=4;ctx.stroke();
+  }
+ }
+ ctx.restore();
+}
+let previous=0;
+function animate(ms){if(ms-previous>40){paintWater(ms/1000);previous=ms;}frame=requestAnimationFrame(animate);}
+function syncMotion(){document.body.classList.toggle("paused",document.hidden);cancelAnimationFrame(frame);if(!reducedMotion.matches&&!document.hidden)frame=requestAnimationFrame(animate);else paintWater(0);}
+window.addEventListener('resize',resizeWater);document.addEventListener('visibilitychange',syncMotion);reducedMotion.addEventListener('change',syncMotion);resizeWater();syncMotion();
+</script>
+</body>
+</html>
+</html>
