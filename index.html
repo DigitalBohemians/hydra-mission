@@ -5,15 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#b5dfed">
 <meta name="apple-mobile-web-app-capable" content="yes">
+
 <title>The Eye Sees You · Hydra Missions</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   min-height: 100%;
   font-family: Inter, Arial, sans-serif;
@@ -24,20 +27,28 @@ body {
   background: #aad8eb;
 }
 
-button {
-  font: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
 .water {
   position: fixed;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 15% 8%, #e1f5f4 0, transparent 53%),
-    radial-gradient(ellipse at 85% 72%, #58b1d0 0, transparent 62%),
-    linear-gradient(145deg, #b9e7ec, #81c7e1 50%, #d7eeee);
+    radial-gradient(
+      ellipse at 15% 8%,
+      #e1f5f4 0,
+      transparent 53%
+    ),
+    radial-gradient(
+      ellipse at 85% 72%,
+      #58b1d0 0,
+      transparent 62%
+    ),
+    linear-gradient(
+      145deg,
+      #b9e7ec,
+      #81c7e1 50%,
+      #d7eeee
+    );
 }
 
 .water::after {
@@ -45,8 +56,16 @@ button {
   position: absolute;
   inset: -12%;
   background:
-    radial-gradient(ellipse at 28% 35%, #efffff80, transparent 48%),
-    radial-gradient(ellipse at 78% 68%, #45a8cf35, transparent 52%);
+    radial-gradient(
+      ellipse at 28% 35%,
+      #efffff80,
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 78% 68%,
+      #45a8cf35,
+      transparent 52%
+    );
   animation: water-light 18s ease-in-out infinite alternate;
   will-change: transform, opacity;
 }
@@ -56,9 +75,11 @@ button {
     transform: translate(-3%, -2%) scale(1);
     opacity: .65;
   }
+
   50% {
     opacity: .95;
   }
+
   100% {
     transform: translate(3%, 3%) scale(1.07);
     opacity: .75;
@@ -180,16 +201,21 @@ main {
   gap: 12px;
 }
 
-.sound {
-  border: 1px solid #346d8580;
-  color: #174d68;
-  background: #edffff45;
-  min-height: 44px;
-  padding: 9px 18px;
-  border-radius: 999px;
-  font-size: 10px;
-  letter-spacing: .15em;
+#sound-hint {
+  margin: 0;
+  padding: 14px 18px;
+  color: #103e57;
+  font-size: clamp(16px, 4.5vw, 22px);
+  font-weight: 700;
+  letter-spacing: .07em;
+  line-height: 1.4;
+  background: rgba(245, 255, 255, .8);
+  border-radius: 12px;
   cursor: pointer;
+}
+
+#sound-hint[hidden] {
+  display: none;
 }
 
 .hint {
@@ -208,23 +234,21 @@ main {
   color: #3d687e;
 }
 
-button:focus-visible {
-  outline: 3px solid #fff;
-  outline-offset: 4px;
-}
-
 @media (max-width: 370px) {
   .app {
     padding-left: 12px;
     padding-right: 12px;
     gap: 12px;
   }
+
   .brand {
     font-size: 10px;
   }
+
   .hint {
     max-width: 260px;
   }
+
   .circle {
     width: min(86vw, 50svh);
   }
@@ -236,26 +260,38 @@ button:focus-visible {
     padding-top: 15px;
     padding-bottom: 12px;
   }
+
   header {
     padding: 0;
   }
+
   .subtitle {
     margin-top: 7px;
   }
+
   .caption {
     display: none;
   }
+
   main {
     padding: 4px 0;
   }
+
   .controls {
     gap: 6px;
   }
+
   .circle {
     width: min(75vw, 46svh);
   }
+
   .copyright {
     margin-top: 3px;
+  }
+
+  #sound-hint {
+    padding: 10px 14px;
+    font-size: 16px;
   }
 }
 
@@ -265,20 +301,24 @@ button:focus-visible {
     grid-template-rows: auto 1fr;
     padding: 18px 30px;
   }
+
   header {
     grid-column: 2;
     grid-row: 1;
     align-self: end;
   }
+
   main {
     grid-column: 1;
     grid-row: 1 / 3;
   }
+
   .controls {
     grid-column: 2;
     grid-row: 2;
     justify-content: center;
   }
+
   .circle {
     width: min(43vw, 82svh);
   }
@@ -311,18 +351,24 @@ body.paused .water::after {
   <main>
     <div class="circle">
       <div class="mission-box">
-        <p id="mission" aria-live="polite" aria-atomic="true"></p>
+        <p
+          id="mission"
+          aria-live="polite"
+          aria-atomic="true"
+        ></p>
       </div>
     </div>
   </main>
 
   <footer class="controls">
-    <button class="sound" id="sound" type="button" aria-pressed="false">
-      ♫ Sound on
-    </button>
+    <p id="sound-hint" role="status">
+      TAP ANYWHERE FOR SOUND
+    </p>
+
     <p class="hint">
       Your mission for today. A new one at midnight on Hydra.
     </p>
+
     <p class="copyright">
       © 2026 Digital Bohemians · All rights reserved
     </p>
@@ -582,8 +628,11 @@ const missions = [
   "End the day by telling someone about your best Hydra discovery."
 ];
 
+/* Daily mission */
+
 const text = document.getElementById("mission");
 const box = document.querySelector(".mission-box");
+
 const reducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 );
@@ -621,7 +670,7 @@ function readDailyMission() {
       return saved;
     }
   } catch (_) {
-    // Storage may be unavailable in restricted browsers.
+    // Continue even when browser storage is unavailable.
   }
 
   return null;
@@ -668,6 +717,7 @@ function updateDailyMission() {
 
 function fitText() {
   let size = Math.min(29, box.clientWidth * .115);
+
   text.style.fontSize = size + "px";
 
   while (
@@ -707,31 +757,46 @@ if (document.fonts) {
   document.fonts.ready.then(fitText);
 }
 
-/* Optional background music */
+/* Start music with the first tap anywhere */
 
-const audio = new Audio("DigitalWave.mp3");
+const audio = new Audio("Mediterranean%20Stillness.mp3");
+
 audio.loop = true;
-audio.volume = .7;
+audio.volume = 0.7;
 
-const sound = document.getElementById("sound");
+const soundHint = document.getElementById("sound-hint");
 
-sound.addEventListener("click", async () => {
-  if (!audio.paused) {
-    audio.pause();
-    sound.textContent = "♫ Sound on";
-    sound.setAttribute("aria-pressed", "false");
+let audioStarting = false;
+
+async function startMusic() {
+  if (audioStarting || !audio.paused) {
     return;
   }
 
+  audioStarting = true;
+
   try {
     await audio.play();
-    sound.textContent = "♫ Sound off";
-    sound.setAttribute("aria-pressed", "true");
+
+    soundHint.hidden = true;
+
+    document.removeEventListener("click", startMusic);
+    document.removeEventListener("keydown", startMusicWithKey);
   } catch (_) {
-    sound.textContent = "Sound unavailable";
-    sound.setAttribute("aria-pressed", "false");
+    soundHint.hidden = false;
+  } finally {
+    audioStarting = false;
   }
-});
+}
+
+function startMusicWithKey(event) {
+  if (event.key === "Enter" || event.key === " ") {
+    startMusic();
+  }
+}
+
+document.addEventListener("click", startMusic);
+document.addEventListener("keydown", startMusicWithKey);
 
 /* Animated water reflections */
 
@@ -753,6 +818,7 @@ function resizeWater() {
   canvas.height = h * dpr;
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
   paintWater(0);
 }
 
@@ -781,8 +847,14 @@ function paintWater(t) {
           10 * Math.sin(v * .047 - t * .23 + i * 1.7);
 
         const base = i * 64 + drift;
-        const x = family === 0 ? v : base + v * .22;
-        const y = family === 0 ? base + v * .29 : v;
+
+        const x = family === 0
+          ? v
+          : base + v * .22;
+
+        const y = family === 0
+          ? base + v * .29
+          : v;
 
         if (v === -80) {
           ctx.moveTo(x, y);
@@ -832,8 +904,16 @@ function syncMotion() {
 }
 
 window.addEventListener("resize", resizeWater);
-document.addEventListener("visibilitychange", syncMotion);
-reducedMotion.addEventListener("change", syncMotion);
+
+document.addEventListener(
+  "visibilitychange",
+  syncMotion
+);
+
+reducedMotion.addEventListener(
+  "change",
+  syncMotion
+);
 
 resizeWater();
 syncMotion();
